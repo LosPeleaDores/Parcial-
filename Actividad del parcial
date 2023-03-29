@@ -1,0 +1,57 @@
+public static double calcularPrecio(String tipoSala, int numBoletas, String hora, String tipoPago, boolean reserva) {
+    double tarifaBasica = 0;
+    
+    // Obtener la tarifa básica según el tipo de sala
+    switch (tipoSala) {
+        case "Dinamix":
+            tarifaBasica = 18800;
+            break;
+        case "3D":
+            tarifaBasica = 15500;
+            break;
+        case "2D":
+            tarifaBasica = 11300;
+            break;
+        default:
+            System.out.println("Tipo de sala no válido");
+            break;
+    }
+    
+    // Aplicar descuentos y recargos según las promociones
+    if (hora.equals("mañana") || hora.equals("tarde")) {
+        // Descuento del 10% en horas no pico
+        tarifaBasica *= 0.9;
+        
+        if (numBoletas >= 3) {
+            // Descuento adicional de $500 pesos por boleta si se compran 3 o más boletas
+            double descuentoAdicional = 500 * numBoletas;
+            tarifaBasica -= descuentoAdicional;
+        }
+    }
+    
+    if (tipoPago.equals("tarjeta")) {
+        // Descuento del 5% si se paga con tarjeta del cinema
+        tarifaBasica *= 0.95;
+    }
+    
+    if (reserva) {
+        // Recargo de $2000 pesos por boleta si se hace reserva
+        double recargo = 2000 * numBoletas;
+        tarifaBasica += recargo;
+    }
+    
+    if (hora.equals("pico")) {
+        // Incremento del 25% en la tarifa básica para las salas 2D y 3D en horas pico
+        if (tipoSala.equals("2D") || tipoSala.equals("3D")) {
+            tarifaBasica *= 1.25;
+        }
+        // Incremento del 50% en la tarifa básica para la sala Dinamix en horas pico
+        else if (tipoSala.equals("Dinamix")) {
+            tarifaBasica *= 1.5;
+        }
+    }
+    
+    // Devolver el precio total
+    double precioTotal = tarifaBasica * numBoletas;
+    return precioTotal;
+}
